@@ -1,30 +1,29 @@
 import sys
-input = sys.stdin.readline
 
-n = int(input().strip())
+n = int(sys.stdin.readline().strip())
 tree = {}
 
 for _ in range(n):
-    root, left, right = input().strip().split()
+    root, left, right = sys.stdin.readline().strip().split()
     tree[root] = [left, right]
 
-def preorder(root):     # 루트 -> 왼 -> 오 탐색
+def preorder(root):
     if root != '.':
-        print(root, end="")         # root
-        preorder(tree[root][0])     # left -> left가 새로운 root가 된다.
-        preorder(tree[root][1])     # right-> right가 새로운 root가 된다.
-    
-def inorder(root):      # 왼 -> 루트 -> 오른 탐색
+        print(root, end='')
+        preorder(tree[root][0])
+        preorder(tree[root][1])
+
+def inorder(root):
     if root != '.':
-        inorder(tree[root][0])      # left
-        print(root, end='')         # root
-        inorder(tree[root][1])      # right
+        inorder(tree[root][0])
+        print(root, end='')
+        inorder(tree[root][1])
 
 def postorder(root):
     if root != '.':
-        postorder(tree[root][0])    # left
-        postorder(tree[root][1])    # right
-        print(root, end='')         # root
+        postorder(tree[root][0])
+        postorder(tree[root][1])
+        print(root, end='')
 
 preorder('A')
 print()
