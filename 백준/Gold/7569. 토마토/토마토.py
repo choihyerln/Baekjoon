@@ -20,7 +20,7 @@ def bfs():
         ch,ci,cj = q.popleft()
         
         # 6방향, 범위내, 미방문, arr[]==0
-        for dh,di,dj in ((0,-1,0),(0,1,0),(0,0,-1),(0,0,1),(-1,0,0),(1,0,0)):
+        for dh,di,dj in ((0,0,-1),(0,0,1),(0,-1,0),(0,1,0),(-1,0,0),(1,0,0)):
             nh,ni,nj = ch+dh, ci+di, cj+dj
             if 0<=nh<H and 0<=ni<N and 0<=nj<M and visited[nh][ni][nj]==0 and arr[nh][ni][nj]==0:
                 q.append((nh,ni,nj))
