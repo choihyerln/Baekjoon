@@ -1,61 +1,54 @@
-"""
-트리의 연결 방향을 무거운 쪽, 가벼운 쪽 이렇게 트리 두개를 만들어서 더 큰수, 더 작은 수가 과반이 넘으면 불가능한 수로 판단한다.
-"""
+import sys
+from collections import deque
+input = sys.stdin.readline
 
-N, M = map(int, input().split())
-graph1 = [[] for _ in range(N + 1)]
-graph2 = [[] for _ in range(N + 1)]
+n,m = map(int, input().split())
+# dfs를 통해 나보다 무거운 or 가벼운 구슬이 몇개인지 파악하기 위함
+big_lst = [[] for _ in range(n+1)]   # 인덱스보다 큰 수
+small_lst = [[] for _ in range(n+1)]    # 인덱스보다 작은 수
 
-for _ in range(M):
-    u, v = map(int, input().split())
-    graph1[u].append(v)
-    graph2[v].append(u)
+for _ in range(m):
+    s,e = map(int, input().split())
+    big_lst[e].append(s)  # 앞번호의 구슬이 뒷번호의 구슬보다 더 무거움
+    small_lst[s].append(e)
 
-vis = [False] * (N + 1)
-cnts = [0] * (N + 1)
+visited=[False]*(n+1)
+cnts=[0]*(n+1)      # 나보다 큰수, 작은수 개수를 세기 위한 배열
 
 def dfs(init_node, node, graph):
-    global vis, cnts
-    vis[node] = True
+    global visited, cnts
+    visited[node] = True
 
-    for nxt in graph[node]:
-        if vis[nxt]:
+    for next in graph[node]:
+        if visited[next]:
             continue
 
         cnts[init_node] += 1
-        dfs(init_node, nxt, graph)
+        dfs(init_node, next, graph)
 
 ans = set()
 
-for i in range(1, N + 1):
-    dfs(i, i, graph1)
-
+for i in range(1, n+1):
+    # 큰 리스트
     # dfs 결과 과반수를 넘으면 그 값을 set에 넣기
-    # for j in range(len(cnts)):
-    if cnts[i] >= (N + 1) // 2:
+    dfs(i, i, big_lst)
+    if cnts[i] >= (n+1)//2:
         ans.add(i)
-
-    # 방문기록 초기화 해주기
+    # 방문기록 초기화
     # 카운트배열 초기화
-    for j in range(1, N + 1):
-        vis[j] = False
+    for j in range(1,n+1):
+        visited[j] = False
         cnts[j] = 0
-    
-    dfs(i, i, graph2)
-    
-    # dfs 결과 과반수를 넘으면 그 값을 set에 넣기
-    # for j in range(len(cnts)):
-    if cnts[i] >= (N + 1) // 2:
-        ans.add(i)
 
-    # 방문기록 초기화 해주기
+    # 작은 리스트
+    # dfs 결과 과반수를 넘으면 그 값을 set에 넣기
+    dfs(i, i, small_lst)
+    if cnts[i] >= (n+1)//2:
+        ans.add(i)
+    # 방문기록 초기화
     # 카운트배열 초기화
-    for j in range(1, N + 1):
-        vis[j] = False
+    for j in range(1,n+1):
+        visited[j] = False
         cnts[j] = 0
 
 print(len(ans))
-
-
-
-
