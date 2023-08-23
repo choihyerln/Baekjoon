@@ -1,32 +1,27 @@
+import heapq as hq
 import sys
-import heapq
+input = sys.stdin.readline
 
-n = int(sys.stdin.readline())
-road_info = []
-for _ in range(n):
-    road = list(map(int, sys.stdin.readline().split()))
-    road_info.append(road)
+N = int(input())
+h_o = []
+for _ in range(N):
+    x = list(map(int, input().strip().split()))
+    h_o.append(sorted(x))
+train = int(sys.stdin.readline().strip())
+h_o = [*filter(lambda x: x[1] - x[0] <= train, h_o)]
+h_o.sort(key=lambda x: x[1])    # 큰 점 기준으로 오른차순 정렬
 
-d = int(sys.stdin.readline())
-roads = []
-for road in road_info:
-    house, office = road
-    if abs(house - office) <= d:
-        road = sorted(road)
-        roads.append(road)
-roads.sort(key=lambda x:x[1])
+possible = []
+ans = 0
 
-answer = 0
-heap = []
-for road in roads:
-    if not heap:
-        heapq.heappush(heap, road)
+for ho in h_o:
+    if not possible:
+        hq.heappush(possible, ho)
     else:
-        while heap[0][0] < road[1] - d:
-            heapq.heappop(heap)
-            if not heap:
+        while possible[0][0] < ho[1] - train:   # 힙에 존재하는 가장 작은 점이 철로의 끝점 안에 있는지
+            hq.heappop(possible)
+            if not possible:
                 break
-        heapq.heappush(heap, road)
-    answer = max(answer, len(heap))
-
-print(answer)
+        hq.heappush(possible, ho)
+    ans = max(len(possible), ans)
+print(ans)
