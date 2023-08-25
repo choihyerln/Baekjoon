@@ -8,10 +8,10 @@ for _ in range(t):
     coins = list(map(int, input().split()))
     m = int(input())
 
-    dp = [0]*(m+1)
+    dp = [0] * (m+1)
     dp[0] = 1
-    for coin in coins:
-        for i in range(1, m+1):     # i는 목표치값
-            if i>=coin:
+    for coin in coins:             # 가지고 있는 동전들
+        for i in range(1, m+1):    # 목표치를 찾는다
+            if i >= coin:
                 dp[i] += dp[i-coin]
     print(dp[m])
