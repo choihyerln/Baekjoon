@@ -1,18 +1,15 @@
-n, k = map(int, input().split())    # 주어지는 물품수, 무게맥시멈
-thing = [[0,0]]
+n, k = map(int, input().split())  # 주어지는 물품수, 무게맥시멈
+thing = []
 
 for _ in range(n):
     thing.append(list(map(int, input().split())))
-dp = [[0] * (k+1) for _ in range(n+1)]
 
-for i in range(1, n+1):
-    for j in range(1, k+1):
-        w = thing[i][0]
-        v = thing[i][1]
+dp = [0]*(k+1)
 
-        if j < w:
-            dp[i][j] = dp[i-1][j]
+for w, v in thing:
+    for weight in range(k, 0, -1):
+        if w <= weight:
+            dp[weight] = max(dp[weight], dp[weight-w]+v)
         else:
-            dp[i][j] = max(dp[i-1][j], dp[i-1][j-w]+v)
-
-print(dp[n][k])
+            break
+print(dp[-1])
